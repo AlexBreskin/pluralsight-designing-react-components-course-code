@@ -3,6 +3,21 @@ import { data } from "../../SpeakerData";
 import { useState } from "react";
 
 function SpeakersList({ showSessions }) {
+  function onFavoriteToggle(id) {
+    const speakersRecPrevious = speakersData.find(function (rec) {
+      return rec.id === id;
+    });
+    const speakerRecUpdated = {
+      ...speakersRecPrevious,
+      favorite: !speakersRecPrevious.favorite,
+    };
+
+    const speakersDataNew = speakersData.map(function (rec) {
+      return rec.id === id ? speakerRecUpdated : rec;
+    });
+
+    setSpeakersData(speakersDataNew);
+  }
   const [speakersData, setSpeakersData] = useState(data);
 
   return (
@@ -14,6 +29,9 @@ function SpeakersList({ showSessions }) {
               key={speaker.id}
               speaker={speaker}
               showSessions={showSessions}
+              onFavoriteToggle={() => {
+                onFavoriteToggle(speaker.id);
+              }}
             />
           );
         })}
